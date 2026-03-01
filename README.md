@@ -11,10 +11,10 @@
 
 ### アカウント・サービス
 
-<!-- | Facebook ページ | Instagram アカウントと連携済みであること（Facebook Login 方式の場合） | -->
 | 必要なもの | 説明 |
 |---|---|
 | Instagram Business or Creator アカウント | 個人アカウントでは API を利用できない（下記 FAQ 参照） |
+| Facebook ページ | Instagram アカウントと連携済みであること（Facebook Login 方式の場合） |
 | Meta (Facebook) Developer アカウント | [developers.facebook.com](https://developers.facebook.com/) で作成 |
 | Facebook App | Developer ダッシュボードで作成・設定 |
 | App Review（アプリ審査） | 本番環境で他者のデータにアクセスする場合に必須（1週間以上） |
