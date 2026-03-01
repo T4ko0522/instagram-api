@@ -1,2 +1,5 @@
 .claude/
 dist/
+.env
+node_modules/
+output/
