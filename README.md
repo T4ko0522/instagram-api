@@ -45,6 +45,90 @@
 
 認証方式は **Business Login（OAuth 2.0）** または **Facebook Login** の2種類。
 
+### 環境変数の取得手順
+
+このツールの実行には `.env` ファイルに以下の2つの値が必要。
+
+```
+INSTAGRAM_ACCESS_TOKEN=your_access_token_here
+INSTAGRAM_USER_ID=your_ig_user_id_here
+```
+
+#### 1. INSTAGRAM_ACCESS_TOKEN の取得
+
+**方法 A: Graph API Explorer（開発・テスト用 / 短期トークン）**
+
+1. [Graph API Explorer](https://developers.facebook.com/tools/explorer/) を開く
+2. 右上の「Meta App」で自分のアプリを選択
+3. 「User or Page」で **User Token** を選択
+4. 「Permissions」で以下を追加:
+   - `instagram_basic`
+   - `instagram_manage_insights`
+   - `pages_show_list`
+   - `pages_read_engagement`
+   - `business_management`（`me/accounts` や `instagram_business_account` の取得に必要）
+5. 「Generate Access Token」をクリックし、Facebook/Instagram 認可を完了
+6. 表示されるトークンが `INSTAGRAM_ACCESS_TOKEN`（有効期限: **約1時間**）
+
+**方法 B: 長期トークンへの交換（本番用 / 60日間有効）**
+
+短期トークンを取得後、以下のエンドポイントで長期トークンに交換する:
+
+```
+GET https://graph.facebook.com/v22.0/oauth/access_token
+  ?grant_type=fb_exchange_token
+  &client_id={app-id}
+  &client_secret={app-secret}
+  &fb_exchange_token={short-lived-token}
+```
+
+- `{app-id}` / `{app-secret}` は [アプリダッシュボード](https://developers.facebook.com/apps/) の「設定 > ベーシック」から取得
+- レスポンスの `access_token` が長期トークン（有効期限: **60日**）
+
+#### 2. INSTAGRAM_USER_ID の取得
+
+`INSTAGRAM_USER_ID` は Instagram Business/Creator アカウントの **Graph API 上の ID**（Instagram アプリ上の表示名やユーザー名ではない）。
+
+**手順:**
+
+1. 上記で取得したアクセストークンを使い、自分の Facebook ページ一覧を取得:
+
+```
+GET https://graph.facebook.com/v22.0/me/accounts?access_token={token}
+```
+
+2. レスポンスからページの `id` を確認:
+
+```json
+{
+  "data": [
+    {
+      "id": "123456789",
+      "name": "My Page"
+    }
+  ]
+}
+```
+
+3. ページ ID を使って、紐づいている Instagram Business アカウント ID を取得:
+
+```
+GET https://graph.facebook.com/v22.0/{page-id}?fields=instagram_business_account&access_token={token}
+```
+
+4. レスポンスの `instagram_business_account.id` が `INSTAGRAM_USER_ID`:
+
+```json
+{
+  "instagram_business_account": {
+    "id": "17841400000000000"
+  },
+  "id": "123456789"
+}
+```
+
+> **注意**: Instagram アカウントが Facebook ページにリンクされていない場合、`instagram_business_account` フィールドが返されない。[Instagram アカウントと Facebook ページのリンク方法](https://help.instagram.com/570895513091465)を参照。
+
 ### 必要なパーミッション
 
 | パーミッション | 用途 |
