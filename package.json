@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "setup": "tsx --env-file .env src/index.ts --setup",
     "start": "tsx --env-file .env src/index.ts",
     "typecheck": "tsc --noEmit"
   },
