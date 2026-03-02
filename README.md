@@ -296,6 +296,27 @@ GET https://graph.facebook.com/v22.0/{page-id}?fields=instagram_business_account
 | `pages_show_list` | Facebook ページ一覧へのアクセス |
 | `pages_read_engagement` | ページエンゲージメントの読み取り |
 
+### App Review（Instagram Public Content Access）
+
+ハッシュタグ検索エンドポイント（`ig_hashtag_search`）を使用するには、トークンのパーミッションに加えて **アプリレベルの機能審査** が必要。
+
+| 項目 | 内容 |
+|---|---|
+| 必要な機能 | **Instagram Public Content Access** |
+| 審査の種類 | App Review（Meta による審査） |
+| 審査がないと | `ig_hashtag_search` 呼び出し時にエラー `(#10) To use 'Instagram Public Content Access'...` が発生する |
+| 開発モード | アプリに登録されたテスター／管理者のアカウントでのみ動作する場合がある |
+
+**審査の提出手順:**
+
+1. [Meta Developer Portal](https://developers.facebook.com/) → アプリ選択
+2. **App Review** → **Permissions and Features**
+3. **「Instagram Public Content Access」** を検索し **Request** をクリック
+4. 使用目的の説明・スクリーンキャストなど必要な情報を提出
+5. 承認後、`ig_hashtag_search` が利用可能になる
+
+> **注意**: 審査には数日〜1週間以上かかる場合がある。開発・テスト目的であれば、まずアプリを開発モードにし、テスターアカウントを追加して動作確認を行うことを推奨する。
+
 ### 実行方法
 
 1. **Node.js** をインストールする（推奨: v18 以上）
