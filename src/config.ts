@@ -163,8 +163,8 @@ export function loadConfig(): AppConfig {
   }
 
   // CLI 引数パース: --hashtags fashion,beauty or --hashtags fashion beauty
-  // Windows の cmd.exe ではカンマが引数区切りになるため、
-  // --hashtags 以降の非フラグ引数をすべて収集する
+  // カンマ・スペースのどちらでも区切れるようにする
+  // Windows の cmd.exe ではカンマが引数区切りになるケースにも対応
   const args = process.argv.slice(2);
   let hashtags = DEFAULT_HASHTAGS;
 
@@ -176,7 +176,7 @@ export function loadConfig(): AppConfig {
       raw.push(args[i]);
     }
     const parsed = raw
-      .flatMap((a) => a.split(","))
+      .flatMap((a) => a.split(/[\s,]+/))
       .map((h) => h.trim().toLowerCase())
       .filter((h) => h.length > 0);
     if (parsed.length > 0) {
